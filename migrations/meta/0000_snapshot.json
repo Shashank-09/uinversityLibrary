@@ -51,8 +51,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "discription": {
-          "name": "discription",
+        "description": {
+          "name": "description",
           "type": "text",
           "primaryKey": false,
           "notNull": true

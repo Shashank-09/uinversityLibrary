@@ -107,7 +107,7 @@ export const navigationLinks = [
         "An essential guide to understanding the core mechanisms of JavaScript, focusing on scope and closures.",
     },
     {
-      id: 4,
+      id: 4,  
       title: "The Alchemist",
       author: "Paulo Coelho",
       genre: "Philosophy / Adventure",

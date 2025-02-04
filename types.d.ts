@@ -1,5 +1,5 @@
 interface Book {
-    id : number
+    id : string
     title : string
     author : string
     genre : string
@@ -7,11 +7,11 @@ interface Book {
     totalCopies : number
     availableCopies : number
     description : string
-    color : string
+    coverColor : string
     coverUrl  : string
-    video : string 
+    videoUrl : string 
     summary : string
-    isLoanedBooke? : boolean
+    createdAt : Date | null
 
 }
 
@@ -39,4 +39,21 @@ interface AuthCredentials {
   interface BorrowBookParams {
     bookId: string;
     userId: string;
+  }
+
+  interface QueryParams {
+    query?: string;
+    sort?: string;
+    page?: number;
+    limit?: number;
+  }
+
+
+  interface PageProps {
+    searchParams: Promise<{
+      query?: string;
+      sort?: string;
+      page?: number;
+    }>;
+    params: Promise<{ id: string }>;
   }
