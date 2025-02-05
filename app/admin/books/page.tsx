@@ -14,10 +14,10 @@ import { Button } from "@/components/ui/button";
 //import Pagination from "@/components/Pagination";
 
 import { getBooks } from "@/lib/admin/actions/book";
+import DeleteBookModal from "@/components/DeleteBookModal";
 
 const Page = async ({ searchParams }: PageProps) => {
   const { query, sort, page } = await searchParams;
-
   const { data: allBooks, metadata } = await getBooks({
     query,
     sort,
@@ -87,13 +87,18 @@ const Page = async ({ searchParams }: PageProps) => {
                           alt="edit"
                         />
                       </Link>
-                      <Image
-                        src="/icons/admin/trash.svg"
-                        width={20}
-                        height={20}
-                        className="object-contain"
-                        alt="delete"
-                      />
+                        <DeleteBookModal bookId={book.id} />
+                      {/* <button
+                        className="relative size-5"
+                      >
+                        <Image
+                          src="/icons/admin/trash.svg"
+                          width={20}
+                          height={20}
+                          className="object-contain"
+                          alt="delete"
+                        />
+                      </button> */}
                     </div>
                   </TableCell>
                 </TableRow>

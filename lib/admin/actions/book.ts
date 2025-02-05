@@ -2,6 +2,7 @@
 
 import { db } from "@/database/drizzel"
 import { books } from "@/database/schema"
+import { Console } from "console";
 import {
     or,
     desc,
@@ -71,7 +72,7 @@ export async function getBooks({
         .limit(limit)
         .offset((page - 1) * limit);
 
-        console.log(booksData)
+        //console.log(booksData)
   
       const totalItems = await db
         .select({
@@ -99,3 +100,46 @@ export async function getBooks({
       };
     }
   }
+
+export  async function getBookById ({id} : {id : string}){
+  try {
+    const book = await db.select().from(books).where(eq(books.id , id)).limit(1)
+
+    return{
+      success : true,
+      data  : JSON.parse(JSON.stringify(book[0]))
+    }
+    
+  } catch (error) {
+    console.log(error)
+    return {
+      success : false,
+      error : "An error occurred while fetching books",
+    }
+  }
+}
+
+export async function deleteBookById({id} : {id : string}) {
+   try {
+    const result = await db.delete(books).where(eq(books.id , id))
+    
+    if (result.rowCount === 0) {
+      return {
+        success: false,
+        error: "Book not found",
+      };
+    }
+
+    return {
+      success: true,
+      message: "Book deleted successfully",
+    };
+
+   } catch (error) {
+    console.error("Error deleting book:", error);
+    return {
+      success: false,
+      error: "An error occurred while deleting the book",
+    };
+   }
+}
