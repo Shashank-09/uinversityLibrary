@@ -57,3 +57,7 @@ interface AuthCredentials {
     }>;
     params: Promise<{ id: string }>;
   }
+
+  interface UpdateBookParams extends BookParams {
+    bookId: string;
+  }

@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import FileUpload from "@/components/FileUpload";
 import ColorPicker from "../ColorPicker";
 import { bookSchema } from "@/lib/validation";
-import { createBook } from "@/lib/admin/actions/book";
+import { createBook , editBook } from "@/lib/admin/actions/book";
 import { toast } from "@/hooks/use-toast";
 
 interface Props extends Partial<Book> {
@@ -31,34 +31,45 @@ const BookForm = ({ type, ...book }: Props) => {
   const form = useForm<z.infer<typeof bookSchema>>({
     resolver: zodResolver(bookSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      author: "",
-      genre: "",
-      rating: 1,
-      totalCopies: 1,
-      coverUrl: "",
-      coverColor: "",
-      videoUrl: "",
-      summary: "",
+      title: book.title ||  "",
+      description: book.description || "",
+      author: book.author || "",
+      genre: book.genre || "",
+      rating: book.rating || 1,
+      totalCopies: book.totalCopies ||   1,
+      coverUrl: book.coverUrl ||  "",
+      coverColor: book.coverColor ||  "",
+      videoUrl: book.videoUrl ||  "",
+      summary: book.summary ||  "",
     },
   });
 
   const onSubmit = async (values: z.infer<typeof bookSchema>) => {
-     const result = await createBook(values)
-     if(result.success){
+    let result;
+    if (type === "create") {
+      result = await createBook(values);
+    } else if (type === "update") {
+      result = await editBook({
+        bookId: book.id!,
+        ...values,
+      });
+    }
+
+     if(result?.success){
       toast({
         title: "Success",
-        description : 'Book created successfully'
+        description : 
+          type === "create" ? 
+         'Book created successfully'
+         : 'Book Updated Successfully'
       });
-
-      router.push(`/admin/book/${result.data.id}`)
-     }else {
-       toast({
-         title : "Error",
-         description : result.message,
-         variant : 'destructive'
-       })
+      router.push(`/admin/books/${result.data.id}`)
+     } else {
+      toast({
+        title: "Error",
+        //description: result?.error,
+        variant: "destructive",
+      });
      }
   };
 
