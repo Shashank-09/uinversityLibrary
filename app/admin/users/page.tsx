@@ -13,11 +13,11 @@ import {
 
 import config from "@/lib/config";
 //import Pagination from "@/components/Pagination";
-//import { getUsers } from "@/lib/admin/actions/user";
-//import Menu from "@/components/admin/Menu";
 import { userRoles } from "@/constants";
 import { getUsers } from "@/lib/admin/actions/user";
 import AvatarUi from "@/components/Avatar";
+import Menu from "@/components/admin/Menu";
+import DeleteUserModal from "@/components/DeleteUserModel";
 
 const Page = async ({ searchParams }: PageProps) => {
   const { query, sort, page } = await searchParams;
@@ -66,11 +66,12 @@ const Page = async ({ searchParams }: PageProps) => {
                     {dayjs(user.createdAt).format("MMM DD, YYYY")}
                   </TableCell>
                   <TableCell>
-                    {/* <Menu
+                    <Menu
+                      userId={user.id}
                       label="Change Role"
                       initialValue={user.role!.toLowerCase()}
                       items={userRoles}
-                    /> */}
+                    />
                   </TableCell>
 
                   <TableCell className="text-dark-200">
@@ -97,13 +98,7 @@ const Page = async ({ searchParams }: PageProps) => {
                     {/* {totalBorrowedBooks} */}
                   </TableCell>
                   <TableCell className="flex justify-center">
-                    <Image
-                      src="/icons/admin/trash.svg"
-                      width={20}
-                      height={20}
-                      className="object-contain"
-                      alt="delete"
-                    />
+                  <DeleteUserModal id={user.id}/>
                   </TableCell>
                 </TableRow>
               ))

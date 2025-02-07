@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { deleteBookById, getBooks } from "@/lib/admin/actions/book";
+
 import { toast } from "@/hooks/use-toast";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { deleteUser } from "@/lib/admin/actions/user";
 
 
-const DeleteBookModal =  ({ bookId }: { bookId: string }) => {
+const DeleteUserModal =  ({ id }: { id: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -16,12 +17,12 @@ const DeleteBookModal =  ({ bookId }: { bookId: string }) => {
 
   const handleDelete = async () => {
     setLoading(true);
-    const result = await deleteBookById({ id: bookId });
+    const result = await deleteUser({ userId:  id});
 
     if (result.success) {
       toast({
         title: "Success",
-        description: "Book deleted successfully",
+        description: "User deleted successfully",
       });
       setIsOpen(false);
       startTransition(() => router.refresh());
@@ -56,7 +57,7 @@ const DeleteBookModal =  ({ bookId }: { bookId: string }) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <h2 className="text-lg font-semibold">Confirm Deletion</h2>
-            <p>Are you sure you want to delete this book?</p>
+            <p>Are you sure you want to delete this user?</p>
             <div className="mt-4 flex gap-3">
               <button
                 className="px-4 py-2 bg-red-600 text-white rounded"
@@ -79,4 +80,4 @@ const DeleteBookModal =  ({ bookId }: { bookId: string }) => {
   );
 };
 
-export default DeleteBookModal;
+export default DeleteUserModal;
