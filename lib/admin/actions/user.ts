@@ -1,6 +1,6 @@
 import { db } from "@/database/drizzel";
-import { users } from "@/database/schema";
-import { asc, desc, eq } from "drizzle-orm";
+import { borrowRecords, users } from "@/database/schema";
+import { asc, count, desc, eq } from "drizzle-orm";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -20,9 +20,14 @@ export  async function getUsers({
 
         const userData = await db
           .select({
-            user : users
+            user : users,
+            totalBorrowedBooks: count(borrowRecords.id).as("totalBorrowedBooks"),
           })
           .from(users)
+          .leftJoin(
+            borrowRecords,
+            eq(borrowRecords.userId , users.id)
+          )
           .groupBy(users.id)
           .orderBy(sortingCondition)
 
@@ -44,6 +49,10 @@ export  async function getUsers({
 
 export async function deleteUser({userId} : {userId : string}) {
    try {
+    const deleteBorrowBook = await db 
+      .delete(borrowRecords)
+      .where(eq(borrowRecords.userId , userId))
+
     const result = await db 
      .delete(users)
      .where(eq(users.id , userId))

@@ -22,7 +22,7 @@ import DeleteUserModal from "@/components/DeleteUserModel";
 const Page = async ({ searchParams }: PageProps) => {
   const { query, sort, page } = await searchParams;
 
-  const { data: allRecords } = await getUsers({
+  const { data: allRecords  } = await getUsers({
     query,
     sort,
     page,
@@ -48,7 +48,7 @@ const Page = async ({ searchParams }: PageProps) => {
 
           <TableBody>
             {allRecords!?.length > 0 ? (
-              allRecords!.map(({ user }) => (
+              allRecords!.map(({ user , totalBorrowedBooks }) => (
                 <TableRow
                   key={user.id}
                   className="border-b-dark-100/5 text-sm font-medium"
@@ -95,7 +95,7 @@ const Page = async ({ searchParams }: PageProps) => {
                     </div>
                   </TableCell>
                   <TableCell className="text-dark-200 w-24">
-                    {/* {totalBorrowedBooks} */}
+                    {totalBorrowedBooks} 
                   </TableCell>
                   <TableCell className="flex justify-center">
                   <DeleteUserModal id={user.id}/>

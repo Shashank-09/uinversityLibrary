@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from "@/database/drizzel"
-import { books } from "@/database/schema"
+import { books, borrowRecords, users } from "@/database/schema"
 import { Console } from "console";
 import {
     or,
@@ -182,5 +182,43 @@ export async function editBook(params:UpdateBookParams) {
       success : false,
       error : "An error occurred while editing the book"
     }
+  }
+}
+
+
+
+export async function getBorrowRecords() {
+  try {
+    const borrowedBooks = await db
+    .select({
+      ...getTableColumns(books),
+      borrow: {
+        id: borrowRecords.id,
+        borrowDate: borrowRecords.borrowDate,
+        returnDate: borrowRecords.returnDate,
+        dueDate: borrowRecords.dueDate,
+        status: borrowRecords.status,
+      },
+      user: {
+        id : users.id,
+        fullname: users.fullName,
+        email: users.email,
+      },
+    })
+      .from(borrowRecords)
+      .leftJoin(books, eq(borrowRecords.bookId, books.id))
+      .leftJoin(users, eq(borrowRecords.userId, users.id))
+      .orderBy(desc(borrowRecords.borrowDate)); // Show latest borrowed books first
+
+    return {
+      success: true,
+      data: borrowedBooks,
+    };
+  } catch (error) {
+    console.error("Error fetching all borrowed books:", error);
+    return {
+      success: false,
+      error: "An error occurred while fetching borrowed books.",
+    };
   }
 }

@@ -8,6 +8,13 @@
       "when": 1738328793560,
       "tag": "0000_same_miracleman",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1739042514331,
+      "tag": "0001_wooden_satana",
+      "breakpoints": true
     }
   ]
 }
